@@ -10,10 +10,28 @@ import {
 export const queryKey = ['tokenStats'];
 
 export const getTokensQuery = async () => {
-  const tokens = await getTokens({
-    chainTypes: [ChainType.EVM, ChainType.SVM, ChainType.UTXO, ChainType.MVM],
-  });
-  return tokens;
+  const [evmTokens, svmTokens, utxoTokens, mvmTokens] = await Promise.all([
+    getTokens({
+      chainTypes: [ChainType.EVM],
+    }),
+    getTokens({
+      chainTypes: [ChainType.SVM],
+    }),
+    getTokens({
+      chainTypes: [ChainType.UTXO],
+    }),
+    getTokens({
+      chainTypes: [ChainType.MVM],
+    }),
+  ]);
+  return {
+    tokens: {
+      ...evmTokens.tokens,
+      ...svmTokens.tokens,
+      ...utxoTokens.tokens,
+      ...mvmTokens.tokens,
+    },
+  };
 };
 
 export const useTokens = () => {
