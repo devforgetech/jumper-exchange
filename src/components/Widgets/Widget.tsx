@@ -13,6 +13,7 @@ import {
   HiddenUI,
   LiFiWidget,
   WidgetSkeleton as LifiWidgetSkeleton,
+  RequiredUI,
 } from '@lifi/widget';
 import { PrefetchKind } from 'next/dist/client/components/router-reducer/router-reducer-types';
 import { useRouter } from 'next/navigation';
@@ -23,7 +24,7 @@ import { publicRPCList } from 'src/const/rpcList';
 import { ThemesMap } from 'src/const/themesMap';
 import { useMemelist } from 'src/hooks/useMemelist';
 import { useWelcomeScreen } from 'src/hooks/useWelcomeScreen';
-import { useWidgetSelection } from 'src/hooks/useWidgetSelection';
+import { useBridgeConditions } from 'src/hooks/useBridgeConditions';
 import { useActiveTabStore } from 'src/stores/activeTab';
 import { useContributionStore } from 'src/stores/contribution/ContributionStore';
 import { themeAllowChains, WidgetWrapper } from '.';
@@ -51,9 +52,8 @@ export function Widget({
   ]);
   const formRef = useRef<FormState>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const { bridgeConditions } = useWidgetSelection({
+  const bridgeConditions = useBridgeConditions({
     formRef,
-    wrapperRef,
     allowToChains,
     configThemeChains: configTheme?.chains,
   });
@@ -180,15 +180,11 @@ export function Widget({
       },
       hiddenUI: [
         ...(configTheme?.hiddenUI ?? []),
-        ...(bridgeConditions.shouldHideToAddress ? [HiddenUI.ToAddress] : []),
         HiddenUI.Appearance,
         HiddenUI.Language,
         HiddenUI.PoweredBy,
         HiddenUI.WalletMenu,
       ],
-      requiredUI: bridgeConditions.shouldRequireToAddress
-        ? ['toAddress']
-        : undefined,
       appearance: widgetTheme.config.appearance,
       theme: widgetTheme.config.theme,
       keyPrefix: `jumper-${starterVariant}`,
@@ -256,7 +252,50 @@ export function Widget({
             },
           },
           exchanges: {
-            allow: ['hyperbloom'], // Replace by hyperbloom when available
+            allow: ['hyperbloom'],
+          },
+        },
+        {
+          label: {
+            text: '1.5x points',
+            sx: {
+              order: 1,
+              display: 'flex',
+              alignItems: 'center',
+              position: 'relative',
+              overflow: 'hidden',
+              marginLeft: 'auto',
+              gap: theme.spacing(0.5),
+              paddingLeft: theme.spacing(0.5),
+              paddingRight: theme.spacing(0.5),
+              background: `linear-gradient(90deg, ${(theme.vars || theme).palette.orchid[600]} 0%, ${(theme.vars || theme).palette.lavenderDark[300]} 100%)`,
+              color: (theme.vars || theme).palette.white.main,
+              ...theme.typography.bodyXSmallStrong,
+              ...theme.applyStyles('light', {
+                // @Note we might adjust to use the theme config
+                background: 'linear-gradient(90deg, #9B006F 0%, #37006B 100%)',
+              }),
+              '&::before': {
+                content: '""',
+                width: '16px',
+                height: '16px',
+                borderRadius: '50%', // Makes the icon circular
+                backgroundImage:
+                  'url(https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/exchanges/hyperflow.svg)',
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center',
+                flexShrink: 0,
+              },
+              '&>p': {
+                alignContent: 'flex-end',
+                paddingLeft: theme.spacing(0.5),
+                paddingRight: theme.spacing(0.5),
+              },
+            },
+          },
+          exchanges: {
+            allow: ['hyperflow'],
           },
         },
       ],
@@ -291,9 +330,19 @@ export function Widget({
     widgetTheme.config.appearance,
     widgetTheme.config.theme,
     integratorStringByType,
-    bridgeConditions,
     theme,
   ]);
+
+  if (bridgeConditions.isAGWToNonABSChain) {
+    config.requiredUI = [...(config.requiredUI || []), RequiredUI.ToAddress];
+  }
+
+  if (
+    bridgeConditions.isBridgeFromHypeToArbNativeUSDC ||
+    bridgeConditions.isBridgeFromEvmToHype
+  ) {
+    config.hiddenUI = [...(config.hiddenUI || []), HiddenUI.ToAddress];
+  }
 
   return (
     <WidgetWrapper

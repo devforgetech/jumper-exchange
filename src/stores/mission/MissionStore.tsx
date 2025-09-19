@@ -8,6 +8,11 @@ import {
 } from 'src/types/strapi';
 import { createWithEqualityFn } from 'zustand/traditional';
 
+export interface TaskFormState {
+  hasForm: boolean;
+  isFormValid: boolean;
+}
+
 interface MissionState {
   currentActiveTaskId?: string;
   currentActiveTaskType?: TaskType;
@@ -15,6 +20,18 @@ interface MissionState {
 
   isCurrentActiveTaskCompleted: boolean;
   setIsCurrentActiveTaskCompleted: (isCompleted: boolean) => void;
+
+  taskFormStates: Record<string, TaskFormState>;
+  setTaskFormState: (
+    taskId: string,
+    hasForm: boolean,
+    isFormValid: boolean,
+  ) => void;
+  getTaskFormState: (taskId: string) => {
+    hasForm: boolean;
+    isFormValid: boolean;
+  };
+  initializeTaskFormStates: (formStates: Record<string, TaskFormState>) => void;
 
   taskTitle?: string;
   taskDescription?: string;
@@ -95,7 +112,7 @@ interface MissionState {
 }
 
 export const useMissionStore = createWithEqualityFn<MissionState>(
-  (set) => ({
+  (set, get) => ({
     currentActiveTaskId: undefined,
     currentActiveTaskType: undefined,
     currentActiveTaskName: undefined,
@@ -103,6 +120,24 @@ export const useMissionStore = createWithEqualityFn<MissionState>(
     isCurrentActiveTaskCompleted: false,
     setIsCurrentActiveTaskCompleted: (isCurrentActiveTaskCompleted) =>
       set({ isCurrentActiveTaskCompleted }),
+
+    taskFormStates: {},
+    setTaskFormState: (taskId, hasForm, isFormValid) =>
+      set((state) => ({
+        taskFormStates: {
+          ...state.taskFormStates,
+          [taskId]: { hasForm, isFormValid },
+        },
+      })),
+    getTaskFormState: (taskId) => {
+      const state = get();
+      return (
+        state.taskFormStates[taskId] || { hasForm: false, isFormValid: true }
+      );
+    },
+    initializeTaskFormStates: (formStates) => {
+      set({ taskFormStates: formStates });
+    },
 
     destinationChain: undefined,
     destinationToken: undefined,
@@ -155,6 +190,7 @@ export const useMissionStore = createWithEqualityFn<MissionState>(
         currentActiveTaskType: undefined,
         currentActiveTaskName: undefined,
         isCurrentActiveTaskCompleted: false,
+        taskFormStates: {},
       }),
   }),
   Object.is,

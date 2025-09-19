@@ -14,6 +14,7 @@ export enum TrackingAction {
   OpenJumperScan = 'action_open_jumper_scan',
   SwitchChain = 'action_switch_chain',
   PortfolioLoaded = 'action_portfolio_loaded',
+  PortfolioOverview = 'action_portfolio_balance_overview',
 
   // Widget
   OnRouteSelected = 'action_on_route_selected',
@@ -32,6 +33,7 @@ export enum TrackingAction {
   ClickContribute = 'action_contribute',
   ContributeImpression = 'action_contribute_impression',
   ContributeSuccess = 'action_contribute_success',
+  OnChainPinned = 'action_on_chain_pinned',
 
   // Mission Widget
   OnSourceChainAndTokenSelectionMission = 'action_on_source_selection_mission',
@@ -191,6 +193,7 @@ export enum TrackingEventParameter {
   UpdatedSetting = 'param_updated_setting',
   NewSettingValue = 'param_new_setting_value',
   PreviousSettingValue = 'param_previous_setting_value',
+  Pinned = 'param_pinned',
 
   // Pageload:
   PageloadSource = 'param_pageload_source',
@@ -290,4 +293,12 @@ export enum TrackingEventParameter {
   //Banner
   ActiveCampaign = 'param_banner_campaign',
   ActiveCampaignBanner = 'param_campaign_banner_campaign',
+
+  // Portfolio
+  PortfolioTotalBalanceUSD = 'param_portfolio_total_balance_usd',
+  PortfolioNumberOfTokens = 'param_portfolio_nb_of_tokens',
+  PortfolioNumberOfChains = 'param_portfolio_nb_of_chains',
+  PortfolioNativeTokensBalanceUSD = 'param_portfolio_native_tokens_balance_usd',
+  PortfolioStableTokensBalanceUSD = 'param_portfolio_stable_tokens_balance_usd',
+  PortfolioOtherTokensBalanceUSD = 'param_portfolio_other_tokens_balance_usd',
 }
