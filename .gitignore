@@ -68,3 +68,6 @@ test-results.json
 
 *storybook.log
 storybook-static
+
+# Cache
+.cache/

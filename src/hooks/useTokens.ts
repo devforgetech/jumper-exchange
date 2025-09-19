@@ -1,4 +1,4 @@
-import { ChainType, getTokens } from '@lifi/sdk';
+import { getTokens } from '@lifi/sdk';
 import type { TokensResponse } from '@lifi/sdk';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -7,32 +7,16 @@ import {
   getTokenByAddressOnSpecificChain as getTokenByAddressOnSpecificChainHelper,
   getNativeTokenForChain as getNativeTokenForChainHelper,
 } from '@/utils/tokenAndChain';
+import { getCachedData } from 'src/app/lib/cache';
 
 export const queryKey = ['tokenStats'];
 
+// No need for cache as the response size is over 2MB, which is the current limit for fetch in Next.js
+export const fetchCache = 'force-no-store';
+
 export const getTokensQuery = async () => {
-  const [evmTokens, svmTokens, utxoTokens, mvmTokens] = await Promise.all([
-    getTokens({
-      chainTypes: [ChainType.EVM],
-    }),
-    getTokens({
-      chainTypes: [ChainType.SVM],
-    }),
-    getTokens({
-      chainTypes: [ChainType.UTXO],
-    }),
-    getTokens({
-      chainTypes: [ChainType.MVM],
-    }),
-  ]);
-  return {
-    tokens: {
-      ...evmTokens.tokens,
-      ...svmTokens.tokens,
-      ...utxoTokens.tokens,
-      ...mvmTokens.tokens,
-    },
-  };
+  const tokens = await getCachedData('tokens', getTokens);
+  return tokens;
 };
 
 export const useTokens = () => {
