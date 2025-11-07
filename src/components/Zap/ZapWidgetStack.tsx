@@ -14,6 +14,7 @@ import { DepositPoolCard } from '../ZapWidget/DepositPoolCard/DepositPoolCard';
 import { useEnhancedZapData } from 'src/hooks/zaps/useEnhancedZapData';
 import { SweepTokensCard } from '../ZapWidget/SweepTokensCard/SweepTokensCard';
 import { useZapQuestIdStorage } from 'src/providers/hooks';
+import envConfig from 'src/config/env-config';
 
 export interface ZapWidgetStackProps {
   customInformation?: CustomInformation;
@@ -105,6 +106,7 @@ export const ZapWidgetStack: FC<ZapWidgetStackProps> = ({
               refetchDepositToken={refetchDepositToken}
               zapData={zapData}
               isZapDataSuccess={isZapDataSuccess}
+              integrator={envConfig.NEXT_PUBLIC_WIDGET_INTEGRATOR_ZAP}
             />
           </ClientOnly>
         </Box>
