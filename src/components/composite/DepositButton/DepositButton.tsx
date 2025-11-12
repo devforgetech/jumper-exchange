@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, MouseEvent } from 'react';
 import {
   DepositButtonDisplayMode,
   DepositButtonProps,
@@ -29,12 +29,18 @@ export const DepositButton: FC<DepositButtonProps> = ({
     <DepositButtonLabelWrapper size={size}>{label}</DepositButtonLabelWrapper>
   );
 
+  const clickHandler = (event: MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onClick();
+  };
+
   return (
     <DepositButtonPrimary
       {...props}
       sx={props.sx}
       size={size}
-      onClick={onClick}
+      onClick={clickHandler}
     >
       <DepositButtonContentWrapper>
         {showLabel && renderedLabel}

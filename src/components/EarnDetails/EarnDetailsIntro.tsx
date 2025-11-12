@@ -64,7 +64,6 @@ export const EarnDetailsIntro: FC<EarnDetailsIntroProps> = ({
                 ...data,
                 minFromAmountUSD: 0.99,
                 positionUrl: '',
-                address: '',
               }}
             />
           </EarnDetailsColumnFlexContainer>

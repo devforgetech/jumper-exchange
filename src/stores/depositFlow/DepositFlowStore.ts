@@ -6,7 +6,6 @@ export interface EarnOpportunityExtended
   extends EarnOpportunityWithLatestAnalytics {
   minFromAmountUSD: number;
   positionUrl: string;
-  address: string;
 }
 
 interface DepositFlowState {

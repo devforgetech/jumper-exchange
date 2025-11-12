@@ -56,11 +56,9 @@ export const EarnOpportunitiesCards = ({
                       ...item,
                       minFromAmountUSD: 0.99,
                       positionUrl: item.url ?? 'unset',
-                      address: item.lpToken.address,
                     }}
                     displayMode={DepositButtonDisplayMode.IconOnly}
                     size={isCompact ? 'large' : 'medium'}
-                    disabled
                   />
                 }
               />

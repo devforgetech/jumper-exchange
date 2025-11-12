@@ -49,11 +49,9 @@ export const EarnRelatedMarkets: FC<EarnRelatedMarketsProps> = ({
                       ...relatedMarket,
                       minFromAmountUSD: 0.99,
                       positionUrl: relatedMarket.url ?? 'unset',
-                      address: relatedMarket.lpToken.address,
                     }}
                     displayMode={DepositButtonDisplayMode.IconOnly}
                     size="large"
-                    disabled
                   />
                 }
               />

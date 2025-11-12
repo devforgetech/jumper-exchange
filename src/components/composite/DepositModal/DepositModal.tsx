@@ -1,9 +1,7 @@
 import { FC } from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { ClientOnly } from 'src/components/ClientOnly';
 import { ZapDepositBackendWidget } from 'src/components/Widgets/variants/base/ZapWidget/ZapDepositBackendWidget';
 import { WidgetTrackingProvider } from 'src/providers/WidgetTrackingProvider';
-import { EarnOpportunityWithLatestAnalytics } from 'src/types/jumper-backend';
 import { TaskType } from 'src/types/strapi';
 import {
   ModalContainer,
@@ -11,17 +9,14 @@ import {
 } from 'src/components/core/modals/ModalContainer/ModalContainer';
 import { useProjectLikeDataFromEarnOpportunity } from 'src/hooks/earn/useProjectLikeDataFromEarnOpportunity';
 import { useZapEarnOpportunitySlugStorage } from 'src/providers/hooks';
-import { useDepositFlowStore } from 'src/stores/depositFlow/DepositFlowStore';
+import {
+  EarnOpportunityExtended,
+  useDepositFlowStore,
+} from 'src/stores/depositFlow/DepositFlowStore';
 import { useTheme } from '@mui/material/styles';
+
 interface DepositModalProps extends ModalContainerProps {
-  earnOpportunity: Pick<
-    EarnOpportunityWithLatestAnalytics,
-    'name' | 'asset' | 'protocol' | 'url' | 'lpToken' | 'latest' | 'slug'
-  > & {
-    minFromAmountUSD: number;
-    positionUrl: string;
-    address: string;
-  };
+  earnOpportunity: EarnOpportunityExtended;
 }
 
 export const DepositModal: FC<DepositModalProps> = ({
