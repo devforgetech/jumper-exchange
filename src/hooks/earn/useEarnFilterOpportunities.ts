@@ -16,7 +16,7 @@ export type Result = UseQueryResult<
 >;
 
 export const useEarnFilterOpportunities = ({ filter }: Props): Result => {
-  return useQuery({
+  return useQuery<EarnOpportunityWithLatestAnalytics[], unknown>({
     queryKey: ['earn-filter-opportunities', filter],
     queryFn: async () => {
       const result = await getOpportunitiesFiltered(filter);
@@ -27,5 +27,6 @@ export const useEarnFilterOpportunities = ({ filter }: Props): Result => {
       return result.data.data;
     },
     refetchInterval: ONE_HOUR_MS,
+    placeholderData: (previousData) => previousData,
   });
 };
