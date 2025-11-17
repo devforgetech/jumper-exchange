@@ -1,9 +1,8 @@
-import {
-  EarnOpportunityFilter,
-  getOpportunitiesFiltered,
-} from '@/app/lib/getOpportunitiesFiltered';
-import { EarnOpportunityWithLatestAnalytics } from '@/types/jumper-backend';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import type { EarnOpportunityFilter } from '@/app/lib/getOpportunitiesFiltered';
+import { getOpportunitiesFiltered } from '@/app/lib/getOpportunitiesFiltered';
+import type { EarnOpportunityWithLatestAnalytics } from '@/types/jumper-backend';
+import type { UseQueryResult } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { ONE_HOUR_MS } from 'src/const/time';
 
 export interface Props {
